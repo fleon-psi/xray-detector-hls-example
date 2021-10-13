@@ -1,10 +1,10 @@
 #include "conversion.h"
 
 template <class T>
-ap_int<16> round (T val) {
+ap_int<16> conv_round (T val) {
 	if (val >= 0)
-		return (ap_int<16>)(val + 0.5);
-	else return (ap_int<16>)(val - 0.5);
+		return (ap_int<16>)(val + static_cast<T>(0.5));
+	else return (ap_int<16>)(val - static_cast<T>(0.5));
 }
 
 ap_int<16> xray_convert(ap_uint<16> input,
@@ -25,11 +25,11 @@ ap_int<16> xray_convert(ap_uint<16> input,
 	type_p     adu = input(13,0);
 	switch (mode) {
 	case 0:
-		return round((adu - p0) * g0);
+		return conv_round((adu - p0) * g0);
 	case 1:
-		return round((adu - p1) * g1);
+		return conv_round((adu - p1) * g1);
 	case 3:
-		return round((adu - p2) * g2);
+		return conv_round((adu - p2) * g2);
 	default:
 		return -32676; // just indication that wrong value is placed
 	}
