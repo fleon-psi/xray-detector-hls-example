@@ -69,9 +69,12 @@ void convert(ap_uint<512> *pixels_in, ap_uint<512> *pixels_out, type_p0 *p0, typ
 void convert_packet(ap_uint<512> *host_mem_in,
 					ap_uint<512> *host_mem_out,
 					action_reg *act) {
-#pragma HLS INTERFACE s_axilite port=act offset=0x80
-#pragma HLS INTERFACE m_axi depth=512 port=host_mem_in  offset=off
-#pragma HLS INTERFACE m_axi depth=512 port=host_mem_out offset=off
+#pragma HLS INTERFACE s_axilite port=return bundle=ctrl_reg
+#pragma HLS INTERFACE s_axilite port=act bundle=ctrl_reg offset=0x100
+#pragma HLS DATA_PACK variable=act
+	
+#pragma HLS INTERFACE m_axi depth=512 bundle=host_mem port=host_mem_in  offset=off
+#pragma HLS INTERFACE m_axi depth=512 bundle=host_mem port=host_mem_out offset=off
 
 	type_p0 p0[N];
 #pragma HLS RESOURCE variable=p0 CORE=RAM_2P_URAM
