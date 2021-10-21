@@ -58,7 +58,7 @@ int main(int argc, char **argv) {
 	reg.offset_g0  = (uint64_t) g0;
 
 	// Run conversion procedure
-	convert_packet(nullptr, nullptr, &reg);
+	hls_action(nullptr, nullptr, &reg);
 
 	// Calculate root mean square deviation (error measure)
 	double err = 0;

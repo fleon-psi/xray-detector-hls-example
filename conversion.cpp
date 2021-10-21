@@ -54,8 +54,7 @@ void load(ap_uint<512> *input, T *out) {
 }
 
 void convert(ap_uint<512> *pixels_in, ap_uint<512> *pixels_out, type_p0 *p0, type_g0 *g0, uint64_t npackets) {
-	for (int i = 0; i < npackets ; i++) {
-//#pragma HLS PIPELINE II=1
+	main: for (int i = 0; i < npackets ; i++) {
 			ap_uint<16> input[32], output[32];
 			// One packet is 512-bits, so 32 x 16-bit numbers
 			unpack(pixels_in[i], input);
@@ -66,9 +65,7 @@ void convert(ap_uint<512> *pixels_in, ap_uint<512> *pixels_out, type_p0 *p0, typ
 		}
 }
 
-void convert_packet(ap_uint<512> *host_mem_in,
-					ap_uint<512> *host_mem_out,
-					action_reg *act) {
+void hls_action(ap_uint<512> *host_mem_in, ap_uint<512> *host_mem_out, action_reg *act) {
 #pragma HLS INTERFACE s_axilite port=return bundle=ctrl_reg
 #pragma HLS INTERFACE s_axilite port=act bundle=ctrl_reg offset=0x100
 #pragma HLS DATA_PACK variable=act
@@ -78,10 +75,8 @@ void convert_packet(ap_uint<512> *host_mem_in,
 
 	type_p0 p0[N];
 #pragma HLS RESOURCE variable=p0 CORE=RAM_2P_URAM
-//#pragma HLS ARRAY_PARTITION variable=p0 cyclic factor=32
 	type_g0 g0[N];
 #pragma HLS RESOURCE variable=g0 CORE=RAM_2P_URAM
-//#pragma HLS ARRAY_PARTITION variable=g0 cyclic factor=32
 
 	load(host_mem_in + act->offset_p0 / 64, p0);
 	load(host_mem_in + act->offset_g0 / 64, g0);

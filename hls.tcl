@@ -1,6 +1,6 @@
 open_project "conversion-example" -reset
 
-set_top convert_packet
+set_top hls_action
 
 foreach file [ list conversion.cpp conversion.h] {
   add_files ${file}
